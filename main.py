@@ -5,7 +5,7 @@ app = FastAPI()
 
 @app.get("/")
 async def read_item(param: str):
-	return {"Otrzymany Parametr:", param}
+	return {"otrzymany_parametr": param}
 
 client = TestClient(app)
 
