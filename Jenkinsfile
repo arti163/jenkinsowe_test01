@@ -19,10 +19,13 @@ pipeline {
         }
         stage('Activate Conda Environment') {
             steps {
-                bat 'call conda activate myfastapienv' // Zmień 'myfastapienv' na nazwę Twojego środowiska
+                bat 'call conda activate myfastapienv' // Upewnij się, że nazwa pasuje do environment.yml
                 bat 'conda info --envs' // Opcjonalnie: wyświetl listę środowisk conda
-                bat 'python --version' // Sprawdź wersję Pythona
-                bat 'pip install -r requirements.txt'
+            }
+        }
+        stage('Install Dependencies with Conda') {
+            steps {
+                bat 'conda install -c conda-forge fastapi uvicorn'
             }
         }
         stage('Build Docker Image') {
