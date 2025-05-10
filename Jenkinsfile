@@ -46,9 +46,28 @@ pipeline {
         }
         stage('Run Docker Container') {
             steps {
-                bat 'docker stop moja-aplikacja-fastapi-kontener || true'
-                bat 'docker rm moja-aplikacja-fastapi-kontener || true'
-                bat 'docker run -d --name moja-aplikacja-fastapi-kontener -p 12123:12123 moja-aplikacja-fastapi'
+                script {
+                    def containerName = 'moja-aplikacja-fastapi-kontener'
+                    def stopCommand = "docker stop ${containerName}"
+                    def removeCommand = "docker rm ${containerName}"
+
+                    // Spróbuj zatrzymać kontener i zignoruj błąd, jeśli go nie ma
+                    try {
+                        bat script: stopCommand
+                    } catch (Exception e) {
+                        echo "Kontener '${containerName}' nie istnieje lub nie działa."
+                    }
+
+                    // Spróbuj usunąć kontener i zignoruj błąd, jeśli go nie ma
+                    try {
+                        bat script: removeCommand
+                    } catch (Exception e) {
+                        echo "Kontener '${containerName}' nie istnieje."
+                    }
+
+                    // Uruchom nowy kontener
+                    bat "docker run -d --name ${containerName} -p 12123:12123 moja-aplikacja-fastapi"
+                }
             }
         }
     }
