@@ -1,0 +1,10 @@
+name: myfastapienv
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - fastapi
+  - uvicorn
+  - pip
+  - pip:
+    - -r requirements.txt
