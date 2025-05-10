@@ -7,10 +7,21 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Set up Python Environment') {
+        stage('Check Conda Availability') {
             steps {
-                bat 'python -m venv venv'
-                bat 'call venv\\Scripts\\activate'
+                bat 'conda --version'
+            }
+        }
+        stage('Create Conda Environment') {
+            steps {
+                bat 'conda env create -f environment.yml'
+            }
+        }
+        stage('Activate Conda Environment') {
+            steps {
+                bat 'call conda activate myfastapienv' // Zmień 'myfastapienv' na nazwę Twojego środowiska
+                bat 'conda info --envs' // Opcjonalnie: wyświetl listę środowisk conda
+                bat 'python --version' // Sprawdź wersję Pythona
                 bat 'pip install -r requirements.txt'
             }
         }
