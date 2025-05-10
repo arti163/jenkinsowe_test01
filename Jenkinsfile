@@ -39,6 +39,11 @@ pipeline {
                 bat 'conda info --envs' // Opcjonalnie: wyświetl listę środowisk conda
             }
         }
+        stage('Run Unit Tests') {
+            steps {
+                bat 'python -m pytest main.py' // Uruchom testy bezpośrednio z main.py
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 bat 'docker build -t moja-aplikacja-fastapi .'
