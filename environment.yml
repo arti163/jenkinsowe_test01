@@ -6,6 +6,7 @@ dependencies:
   - fastapi
   - uvicorn
   - pytest
+  - httpx
   - pip
   - pip:
     - -r requirements.txt
