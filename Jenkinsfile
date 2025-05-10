@@ -12,6 +12,22 @@ pipeline {
                 bat 'conda --version'
             }
         }
+        stage('Check and Remove Existing Conda Environment') {
+            steps {
+                script {
+                    def environmentName = 'myfastapienv' // Zdefiniuj nazwę środowiska jako zmienną
+                    def checkEnvCommand = "conda env list | findstr /C:\"${environmentName}\""
+                    def envExists = bat(script: checkEnvCommand, returnStatus: true) == 0
+
+                    if (envExists) {
+                        echo "Środowisko Conda '${environmentName}' już istnieje. Usuwam..."
+                        bat "conda env remove -n ${environmentName} -y"
+                    } else {
+                        echo "Środowisko Conda '${environmentName}' nie istnieje. Będzie utworzone."
+                    }
+                }
+            }
+        }
         stage('Create Conda Environment') {
             steps {
                 bat 'conda env create -f environment.yml'
@@ -21,11 +37,6 @@ pipeline {
             steps {
                 bat 'call conda activate myfastapienv' // Upewnij się, że nazwa pasuje do environment.yml
                 bat 'conda info --envs' // Opcjonalnie: wyświetl listę środowisk conda
-            }
-        }
-        stage('Install Dependencies with Conda') {
-            steps {
-                bat 'conda install -c conda-forge fastapi uvicorn'
             }
         }
         stage('Build Docker Image') {
