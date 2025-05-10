@@ -5,6 +5,7 @@ dependencies:
   - python=3.11
   - fastapi
   - uvicorn
+  - pytest
   - pip
   - pip:
     - -r requirements.txt
